@@ -1,0 +1,517 @@
+[04-Aug-2025 06:00:51 Europe/Berlin] Failed to insert task 1 into minor_tasks. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 515
+            [code] => 515
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.minor_tasks'; column does not allow nulls. INSERT fails.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.minor_tasks'; column does not allow nulls. INSERT fails.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 06:00:51 Europe/Berlin] Submit report error: Failed to insert task 1 into minor_tasks.
+[04-Aug-2025 06:24:28 Europe/Berlin] Failed to insert task 1 into minor_tasks. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 515
+            [code] => 515
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.minor_tasks'; column does not allow nulls. INSERT fails.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.minor_tasks'; column does not allow nulls. INSERT fails.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 06:24:28 Europe/Berlin] Submit report error: Failed to insert task 1 into minor_tasks.
+[04-Aug-2025 06:29:39 Europe/Berlin] Failed to insert task 1 into minor_tasks. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 515
+            [code] => 515
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.minor_tasks'; column does not allow nulls. INSERT fails.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.minor_tasks'; column does not allow nulls. INSERT fails.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 06:29:39 Europe/Berlin] Submit report error: Failed to insert task 1 into minor_tasks.
+[04-Aug-2025 06:29:50 Europe/Berlin] Failed to insert task 1 into minor_tasks. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 515
+            [code] => 515
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.minor_tasks'; column does not allow nulls. INSERT fails.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.minor_tasks'; column does not allow nulls. INSERT fails.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 06:29:50 Europe/Berlin] Submit report error: Failed to insert task 1 into minor_tasks.
+[04-Aug-2025 06:58:37 Europe/Berlin] Failed to insert task 1 into minor_tasks. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 515
+            [code] => 515
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.minor_tasks'; column does not allow nulls. INSERT fails.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.minor_tasks'; column does not allow nulls. INSERT fails.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 06:58:37 Europe/Berlin] Submit report error: Failed to insert task 1 into minor_tasks.
+[04-Aug-2025 06:59:55 Europe/Berlin] Failed to insert task 1 into tasks table. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 515
+            [code] => 515
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 06:59:55 Europe/Berlin] Submit report error: Failed to insert task 1 into tasks table. SQL Error: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 515
+            [code] => 515
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:00:19 Europe/Berlin] Failed to insert task 1 into tasks table. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 547
+            [code] => 547
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:00:19 Europe/Berlin] Submit report error: Failed to insert task 1 into tasks table. SQL Error: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 547
+            [code] => 547
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:01:13 Europe/Berlin] Failed to insert task 1 into tasks table. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 547
+            [code] => 547
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:01:13 Europe/Berlin] Submit report error: Failed to insert task 1 into tasks table. SQL Error: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 547
+            [code] => 547
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:02:03 Europe/Berlin] Failed to insert task 1 into tasks table. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 547
+            [code] => 547
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:02:03 Europe/Berlin] Submit report error: Failed to insert task 1 into tasks table. SQL Error: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 547
+            [code] => 547
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:03:19 Europe/Berlin] Failed to insert task 1 into tasks table. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 547
+            [code] => 547
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:03:19 Europe/Berlin] Submit report error: Failed to insert task 1 into tasks table. SQL Error: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 547
+            [code] => 547
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:03:43 Europe/Berlin] Failed to insert task 1 into tasks table. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 547
+            [code] => 547
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:03:43 Europe/Berlin] Submit report error: Failed to insert task 1 into tasks table. SQL Error: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 547
+            [code] => 547
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__tasks__priority__5DCAEF64". The conflict occurred in database "daily_report_db", table "dbo.tasks", column 'priority'.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:04:52 Europe/Berlin] Priority constraint definition: ([priority]='urgent' OR [priority]='high' OR [priority]='medium' OR [priority]='low')
+[04-Aug-2025 07:05:14 Europe/Berlin] Priority constraint definition: ([priority]='urgent' OR [priority]='high' OR [priority]='medium' OR [priority]='low')
+[04-Aug-2025 07:09:31 Europe/Berlin] Priority constraint definition: ([priority]='urgent' OR [priority]='high' OR [priority]='medium' OR [priority]='low')
+[04-Aug-2025 07:09:31 Europe/Berlin] Failed to insert task 1 into tasks table. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 515
+            [code] => 515
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:09:31 Europe/Berlin] Submit report error: Failed to insert task 1 into tasks table. SQL Error: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 515
+            [code] => 515
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:09:37 Europe/Berlin] Priority constraint definition: ([priority]='urgent' OR [priority]='high' OR [priority]='medium' OR [priority]='low')
+[04-Aug-2025 07:09:37 Europe/Berlin] Failed to insert task 1 into tasks table. Details: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 515
+            [code] => 515
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:09:37 Europe/Berlin] Submit report error: Failed to insert task 1 into tasks table. SQL Error: Array
+(
+    [0] => Array
+        (
+            [0] => 23000
+            [SQLSTATE] => 23000
+            [1] => 515
+            [code] => 515
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'image_path', table 'daily_report_db.dbo.tasks'; column does not allow nulls. INSERT fails.
+        )
+
+    [1] => Array
+        (
+            [0] => 01000
+            [SQLSTATE] => 01000
+            [1] => 3621
+            [code] => 3621
+            [2] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+            [message] => [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated.
+        )
+
+)
+
+[04-Aug-2025 07:09:45 Europe/Berlin] Priority constraint definition: ([priority]='urgent' OR [priority]='high' OR [priority]='medium' OR [priority]='low')
+[04-Aug-2025 07:10:53 Europe/Berlin] Priority constraint definition: ([priority]='urgent' OR [priority]='high' OR [priority]='medium' OR [priority]='low')
+[04-Aug-2025 08:46:13 Europe/Berlin] Priority constraint definition: ([priority]='urgent' OR [priority]='high' OR [priority]='medium' OR [priority]='low')
+[05-Aug-2025 05:15:50 Europe/Berlin] Priority constraint definition: ([priority]='urgent' OR [priority]='high' OR [priority]='medium' OR [priority]='low')

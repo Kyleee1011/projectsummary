@@ -2,97 +2,139 @@
 session_start();
 header('Content-Type: application/json');
 
-ini_set('log_errors', 1);
-ini_set('error_log', 'C:\inetpub\wwwroot\projectsummary\php_errors.log');
-
+// Check if user is logged in
 if (!isset($_SESSION['username']) || !isset($_SESSION['empcode'])) {
-    error_log('Unauthorized access attempt in fetch_reports.php');
     echo json_encode([]);
-    exit();
+    exit;
 }
 
-if (!extension_loaded('sqlsrv')) {
-    error_log('SQLSRV extension not loaded in fetch_reports.php');
-    echo json_encode(['error' => 'SQLSRV extension is required but not loaded']);
-    exit();
-}
-
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
-$base_url = $protocol . "://" . $_SERVER['HTTP_HOST'] . "/projectsummary/Uploads/";
-
-$serverName = "172.16.2.8";
+// Database connection
+$serverName = "10.2.0.9";
 $connectionOptions = [
     "UID" => "sa",
-    "PWD" => "i2t400",
+    "PWD" => "S3rverDB02lrn25",
     "Database" => "daily_report_db"
 ];
-
 $conn = sqlsrv_connect($serverName, $connectionOptions);
+
 if ($conn === false) {
-    error_log('Database connection failed in fetch_reports.php: ' . print_r(sqlsrv_errors(), true));
     echo json_encode([]);
-    exit();
+    exit;
 }
 
 try {
-    $query = "SELECT r.id, r.report_date AS date, r.created_at, r.updated_at, t.task_description AS description, t.image_path AS image
-              FROM reports r
-              LEFT JOIN tasks t ON r.id = t.report_id
-              WHERE r.empcode = ?";
-    $params = [$_SESSION['empcode']];
+    $empcode = $_SESSION['empcode'];
+    $category = $_GET['category'] ?? '';
+    $search = $_GET['search'] ?? '';
+    $dateFrom = $_GET['date_from'] ?? '';
+    $dateTo = $_GET['date_to'] ?? '';
 
-    if (!empty($_GET['search'])) {
-        $query .= " AND t.task_description LIKE ?";
-        $params[] = '%' . $_GET['search'] . '%';
+    // Validate category
+    if (!in_array($category, ['minor', 'major'])) {
+        throw new Exception('Invalid category specified');
     }
 
-    if (!empty($_GET['date_from'])) {
-        $query .= " AND r.report_date >= ?";
-        $params[] = $_GET['date_from'];
+    // Build base query using the unified tasks table
+    $sql = "
+        SELECT 
+            r.id,
+            r.empcode,
+            r.report_date,
+            r.created_at,
+            r.updated_at,
+            t.id as task_id,
+            t.task_description,
+            t.image_path,
+            t.category
+        FROM daily_report_db.dbo.reports r
+        LEFT JOIN daily_report_db.dbo.tasks t ON r.id = t.report_id
+        WHERE r.empcode = ? AND t.category = ?
+    ";
+    
+    $params = [$empcode, $category];
+
+    // Add date filters
+    if (!empty($dateFrom)) {
+        $sql .= " AND r.report_date >= ?";
+        $params[] = $dateFrom;
+    }
+    
+    if (!empty($dateTo)) {
+        $sql .= " AND r.report_date <= ?";
+        $params[] = $dateTo;
     }
 
-    if (!empty($_GET['date_to'])) {
-        $query .= " AND r.report_date <= ?";
-        $params[] = $_GET['date_to'];
+    // Add search filter
+    if (!empty($search)) {
+        $sql .= " AND t.task_description LIKE ?";
+        $params[] = '%' . $search . '%';
     }
 
-    $query .= " ORDER BY r.report_date DESC, r.created_at DESC";
+    $sql .= " ORDER BY r.report_date DESC, r.created_at DESC, t.id";
 
-    $stmt = sqlsrv_prepare($conn, $query, $params);
-    if (!$stmt || !sqlsrv_execute($stmt)) {
-        error_log('Failed to fetch reports: ' . print_r(sqlsrv_errors(), true));
-        throw new Exception('Failed to fetch reports');
+    $stmt = sqlsrv_query($conn, $sql, $params);
+    
+    if ($stmt === false) {
+        throw new Exception('Database query failed: ' . print_r(sqlsrv_errors(), true));
     }
 
     $reports = [];
+    $currentReportId = null;
+    $currentReport = null;
+
     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-        $report_id = $row['id'];
-        if (!isset($reports[$report_id])) {
-            $reports[$report_id] = [
-                'id' => $report_id,
-                'date' => $row['date'] ? $row['date']->format('Y-m-d') : null,
-                'created_at' => $row['created_at'] ? $row['created_at']->format('Y-m-d H:i:s') : null,
-                'updated_at' => $row['updated_at'] ? $row['updated_at']->format('Y-m-d H:i:s') : null,
+        if ($currentReportId !== $row['id']) {
+            // Save previous report if exists
+            if ($currentReport !== null) {
+                $reports[] = $currentReport;
+            }
+
+            // Start new report
+            $currentReportId = $row['id'];
+            $currentReport = [
+                'id' => $row['id'],
+                'empcode' => $row['empcode'],
+                'date' => $row['report_date'],
+                'created_at' => $row['created_at'],
+                'updated_at' => $row['updated_at'],
                 'tasks' => []
             ];
         }
-        if ($row['description']) {
-            $image_path = $row['image'] ? $base_url . basename($row['image']) : null;
-            error_log("Fetch Reports Image URL: $image_path"); // Debug log
-            $reports[$report_id]['tasks'][] = [
-                'description' => $row['description'],
-                'image' => $image_path
+
+        // Add task to current report if task exists
+        if (!empty($row['task_id'])) {
+            $imagePath = '';
+            if (!empty($row['image_path'])) {
+                // Create full URL for image
+                $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+                $host = $_SERVER['HTTP_HOST'];
+                $basePath = dirname($_SERVER['REQUEST_URI']);
+                $imagePath = $protocol . '://' . $host . $basePath . '/' . $row['image_path'];
+            }
+
+            $currentReport['tasks'][] = [
+                'id' => $row['task_id'],
+                'description' => $row['task_description'],
+                'image' => $imagePath,
+                'category' => $row['category']
             ];
         }
     }
 
-    $reports = array_values($reports);
+    // Add the last report
+    if ($currentReport !== null) {
+        $reports[] = $currentReport;
+    }
+
+    sqlsrv_free_stmt($stmt);
     echo json_encode($reports);
 
 } catch (Exception $e) {
-    error_log('Error in fetch_reports.php: ' . $e->getMessage());
+    error_log("Error in fetch_reports.php: " . $e->getMessage());
     echo json_encode([]);
 } finally {
-    sqlsrv_close($conn);
+    if ($conn) {
+        sqlsrv_close($conn);
+    }
 }
 ?>

@@ -26,10 +26,10 @@ if (!extension_loaded('sqlsrv')) {
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
 $base_url = $protocol . "://" . $_SERVER['HTTP_HOST'] . "/projectsummary/Uploads/";
 
-$serverName = "172.16.2.8";
+$serverName = "10.2.0.9";
 $connectionOptions = [
     "UID" => "sa",
-    "PWD" => "i2t400",
+    "PWD" => "S3rverDB02lrn25",
     "Database" => "daily_report_db"
 ];
 

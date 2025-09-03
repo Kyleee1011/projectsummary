@@ -1,15 +1,18 @@
 <?php
-// --- register.php ---
-// This file is for creating new users and managing existing users for both Project Summary (it_project_db) and Daily Report (daily_report_db) systems.
-// For security, you should remove or protect this file after creating your admin accounts.
+session_start();
+if (!isset($_SESSION['username']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    // Redirect non-admins or logged-out users to the login page.
+    header('Location: login.php');
+    exit(); // Stop further script execution.
+}
 
 require_once 'config/config.php';
 
 // Database connection for daily_report_db
-$dailyReportServer = "172.16.2.8";
+$dailyReportServer = "10.2.0.9";
 $dailyReportConnOptions = [
     "UID" => "sa",
-    "PWD" => "i2t400",
+    "PWD" => "S3rverDB02lrn25",
     "Database" => "daily_report_db"
 ];
 
@@ -157,6 +160,13 @@ function getAllUsers($db, $dailyReportConn) {
             if (!in_array($user['username'], $usernames)) {
                 $allUsers[] = $user;
                 $usernames[] = $user['username'];
+            } else { // If user exists in both, make sure the full_name from daily_report is used
+                foreach ($allUsers as $key => $existing) {
+                    if ($existing['username'] === $user['username']) {
+                        $allUsers[$key]['full_name'] = $user['full_name'];
+                        break;
+                    }
+                }
             }
         }
         usort($allUsers, function($a, $b) { return strcmp($a['username'], $b['username']); });
@@ -292,182 +302,278 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 40px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .register-container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
-        h2 { text-align: center; color: #333; margin-bottom: 30px; }
+        :root {
+            --primary-start: #667eea;
+            --primary-end: #764ba2;
+            --secondary-start: #56ab2f;
+            --secondary-end: #a8e6cf;
+            --danger-start: #ff4757;
+            --danger-end: #ff6b7a;
+            --light-grey: #f4f7f6;
+            --medium-grey: #ddd;
+            --dark-grey: #555;
+            --text-color: #333;
+            --white: #fff;
+            --shadow: 0 8px 24px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--light-grey);
+            margin: 0;
+            padding: 40px 20px;
+            color: var(--text-color);
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .user-list-panel {
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        
+        .user-list-panel::-webkit-scrollbar { width: 6px; }
+        .user-list-panel::-webkit-scrollbar-track { background: #f1f1f1; }
+        .user-list-panel::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+        .user-list-panel::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+        h2, h3 {
+            text-align: center;
+            color: var(--text-color);
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
-        input:focus, select:focus { border-color: #764ba2; outline: none; box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1); }
-        .btn { width: 100%; padding: 15px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3); }
-        .btn.update { background: linear-gradient(45deg, #56ab2f, #a8e6cf); }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark-grey); }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--medium-grey);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        input:focus, select:focus {
+            border-color: var(--primary-end);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            background: linear-gradient(45deg, var(--primary-start), var(--primary-end));
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .btn.update { background: linear-gradient(45deg, var(--secondary-start), var(--secondary-end)); }
         .btn.update:hover { box-shadow: 0 10px 20px rgba(86, 171, 47, 0.3); }
-        .btn.delete { background: linear-gradient(45deg, #ff4757, #ff6b7a); }
+        .btn.delete { background: linear-gradient(45deg, var(--danger-start), var(--danger-end)); }
         .btn.delete:hover { box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3); }
-        .message { text-align: center; margin-top: 20px; padding: 12px; border-radius: 8px; font-weight: 500; }
+        
+        .message { text-align: center; margin-bottom: 20px; padding: 12px; border-radius: 8px; font-weight: 500; }
         .message.success { background-color: #d4edda; color: #155724; }
         .message.error { background-color: #f8d7da; color: #721c24; }
-        .login-link { text-align: center; margin-top: 20px; }
-        .login-link a { color: #667eea; text-decoration: none; font-weight: 600; }
-        .action-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #eee; }
-        .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; border: none; background: none; font-weight: 600; color: #666; }
-        .tab.active { color: #667eea; border-bottom: 2px solid #667eea; }
+        
+        .page-links { text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+        .page-links a { color: var(--primary-start); text-decoration: none; font-weight: 600; margin: 0 10px; }
+        
+        .action-tabs { display: flex; margin-bottom: 25px; border-bottom: 2px solid #eee; }
+        .tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; border: none; background: none; font-weight: 600; color: #666; transition: color 0.2s, border-color 0.2s; }
+        .tab.active { color: var(--primary-start); border-bottom: 2px solid var(--primary-start); }
+        
         .form-section { display: none; }
         .form-section.active { display: block; }
-        .existing-users { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; }
-        .existing-users h3 { margin-top: 0; color: #333; }
-        .user-item { padding: 8px; margin: 5px 0; background: white; border-radius: 4px; border-left: 4px solid #667eea; }
+        
+        .user-item { padding: 12px; margin-bottom: 10px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid var(--primary-start); font-size: 0.95em; }
+        .user-item strong { color: var(--primary-end); }
+        
         .password-note { font-size: 0.9em; color: #666; margin-top: 5px; }
-        .delete-warning { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        
+        .delete-warning { background: #fff3cd; border-left: 5px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
         .delete-warning h4 { margin-top: 0; color: #dc3545; }
+        
         .confirmation-checkbox { margin: 15px 0; }
         .confirmation-checkbox input { width: auto; margin-right: 10px; }
         .confirmation-checkbox label { display: inline; font-weight: normal; }
+        
+        @media (max-width: 1024px) {
+            body { padding: 20px 10px; }
+            .main-container { grid-template-columns: 1fr; }
+            .panel { padding: 25px; }
+            .user-list-panel { max-height: 450px; }
+        }
     </style>
 </head>
 <body>
-    <div class="register-container">
-        <h2>User Management</h2>
-        
-        <?php if (!empty($message)): ?>
-            <p class="message <?php echo strpos($message, 'successfully') !== false ? 'success' : 'error'; ?>"><?php echo htmlspecialchars($message); ?></p>
-        <?php endif; ?>
-        
-        <div class="action-tabs">
-            <button class="tab active" onclick="showTab('register')">Register User</button>
-            <button class="tab" onclick="showTab('update')">Update User</button>
-            <button class="tab" onclick="showTab('delete')">Delete User</button>
-        </div>
-        
-        <!-- Register User Form -->
-        <div id="register-section" class="form-section active">
-            <form action="register.php" method="POST">
-                <input type="hidden" name="action" value="register">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="form-group">
-                    <label for="empcode">Employee Code</label>
-                    <input type="text" id="empcode" name="empcode" required>
-                </div>
-                <div class="form-group">
-                    <label for="full_name">Full Name</label>
-                    <input type="text" id="full_name" name="full_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="role">Role</label>
-                    <select id="role" name="role" required>
-                        <option value="viewer">Viewer</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn">Register User</button>
-            </form>
-        </div>
-        
-        <!-- Update User Form -->
-        <div id="update-section" class="form-section">
-            <form action="register.php" method="POST">
-                <input type="hidden" name="action" value="update">
-                <div class="form-group">
-                    <label for="update-username">Select User to Update</label>
-                    <select id="update-username" name="username" required onchange="fillUserDetails(this.value)">
-                        <option value="">Select a user...</option>
-                        <?php foreach ($existingUsers as $user): ?>
-                            <option value="<?php echo htmlspecialchars($user['username']); ?>" 
-                                    data-role="<?php echo htmlspecialchars($user['role']); ?>"
-                                    data-empcode="<?php echo htmlspecialchars($user['empcode']); ?>"
-                                    data-full_name="<?php echo htmlspecialchars($user['full_name']); ?>">
-                                <?php echo htmlspecialchars($user['username']); ?> (<?php echo htmlspecialchars($user['role']); ?>)
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="update-password">New Password</label>
-                    <input type="password" id="update-password" name="password">
-                    <div class="password-note">Leave blank to keep current password</div>
-                </div>
-                <div class="form-group">
-                    <label for="update-empcode">Employee Code</label>
-                    <input type="text" id="update-empcode" name="empcode" required>
-                </div>
-                <div class="form-group">
-                    <label for="update-full_name">Full Name</label>
-                    <input type="text" id="update-full_name" name="full_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="update-role">Role</label>
-                    <select id="update-role" name="role" required>
-                        <option value="viewer">Viewer</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn update">Update User</button>
-            </form>
-        </div>
-        
-        <!-- Delete User Form -->
-        <div id="delete-section" class="form-section">
-            <div class="delete-warning">
-                <h4>⚠️ Warning</h4>
-                <p>Deleting a user is permanent and cannot be undone. The user will lose access to both Project Summary and Daily Report systems immediately.</p>
+    <div class="main-container">
+        <div class="management-panel panel">
+            <h2>User Management</h2>
+            
+            <?php if (!empty($message)): ?>
+                <p class="message <?php echo strpos($message, 'successfully') !== false ? 'success' : 'error'; ?>"><?php echo htmlspecialchars($message); ?></p>
+            <?php endif; ?>
+            
+            <div class="action-tabs">
+                <button class="tab active" onclick="showTab('register')">Register User</button>
+                <button class="tab" onclick="showTab('update')">Update User</button>
+                <button class="tab" onclick="showTab('delete')">Delete User</button>
             </div>
-            <form action="register.php" method="POST" onsubmit="return confirmDelete()">
-                <input type="hidden" name="action" value="delete">
-                <div class="form-group">
-                    <label for="delete-username">Select User to Delete</label>
-                    <select id="delete-username" name="username" required onchange="showDeleteUserDetails(this.value)">
-                        <option value="">Select a user...</option>
-                        <?php foreach ($existingUsers as $user): ?>
-                            <option value="<?php echo htmlspecialchars($user['username']); ?>" 
-                                    data-role="<?php echo htmlspecialchars($user['role']); ?>"
-                                    data-empcode="<?php echo htmlspecialchars($user['empcode']); ?>"
-                                    data-full_name="<?php echo htmlspecialchars($user['full_name']); ?>">
-                                <?php echo htmlspecialchars($user['username']); ?> (<?php echo htmlspecialchars($user['role']); ?>)
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+            
+            <div id="register-section" class="form-section active">
+                <form action="register.php" method="POST">
+                    <input type="hidden" name="action" value="register">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="empcode">Employee Code</label>
+                        <input type="text" id="empcode" name="empcode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="full_name">Full Name</label>
+                        <input type="text" id="full_name" name="full_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" name="role" required>
+                            <option value="viewer">Viewer</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Register User</button>
+                </form>
+            </div>
+            
+            <div id="update-section" class="form-section">
+                <form action="register.php" method="POST">
+                    <input type="hidden" name="action" value="update">
+                    <div class="form-group">
+                        <label for="update-username">Select User to Update</label>
+                        <select id="update-username" name="username" required onchange="fillUserDetails(this)">
+                            <option value="">Select a user...</option>
+                            <?php foreach ($existingUsers as $user): ?>
+                                <option value="<?php echo htmlspecialchars($user['username']); ?>" 
+                                        data-role="<?php echo htmlspecialchars($user['role']); ?>"
+                                        data-empcode="<?php echo htmlspecialchars($user['empcode']); ?>"
+                                        data-full_name="<?php echo htmlspecialchars($user['full_name']); ?>">
+                                    <?php echo htmlspecialchars($user['username']); ?> (<?php echo htmlspecialchars($user['role']); ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-password">New Password</label>
+                        <input type="password" id="update-password" name="password">
+                        <div class="password-note">Leave blank to keep current password</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-empcode">Employee Code</label>
+                        <input type="text" id="update-empcode" name="empcode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-full_name">Full Name</label>
+                        <input type="text" id="update-full_name" name="full_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-role">Role</label>
+                        <select id="update-role" name="role" required>
+                            <option value="viewer">Viewer</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn update">Update User</button>
+                </form>
+            </div>
+            
+            <div id="delete-section" class="form-section">
+                <div class="delete-warning">
+                    <h4>⚠️ Warning</h4>
+                    <p>Deleting a user is permanent and cannot be undone. The user will lose access to both Project Summary and Daily Report systems immediately.</p>
                 </div>
-                <div id="delete-user-details" style="display: none; padding: 15px; background: #f8f9fa; border-radius: 8px; margin: 15px 0;">
-                    <h4>User Details:</h4>
-                    <p><strong>Username:</strong> <span id="delete-user-username"></span></p>
-                    <p><strong>Role:</strong> <span id="delete-user-role"></span></p>
-                    <p><strong>Employee Code:</strong> <span id="delete-user-empcode"></span></p>
-                    <p><strong>Full Name:</strong> <span id="delete-user-full_name"></span></p>
-                </div>
-                <div class="confirmation-checkbox">
-                    <input type="checkbox" id="delete-confirm" required>
-                    <label for="delete-confirm">I understand that this action cannot be undone and I want to delete this user.</label>
-                </div>
-                <button type="submit" class="btn delete">Delete User</button>
-            </form>
+                <form action="register.php" method="POST" onsubmit="return confirmDelete()">
+                    <input type="hidden" name="action" value="delete">
+                    <div class="form-group">
+                        <label for="delete-username">Select User to Delete</label>
+                        <select id="delete-username" name="username" required onchange="showDeleteUserDetails(this)">
+                            <option value="">Select a user...</option>
+                            <?php foreach ($existingUsers as $user): ?>
+                                <option value="<?php echo htmlspecialchars($user['username']); ?>" 
+                                        data-role="<?php echo htmlspecialchars($user['role']); ?>"
+                                        data-empcode="<?php echo htmlspecialchars($user['empcode']); ?>"
+                                        data-full_name="<?php echo htmlspecialchars($user['full_name']); ?>">
+                                    <?php echo htmlspecialchars($user['username']); ?> (<?php echo htmlspecialchars($user['role']); ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div id="delete-user-details" style="display: none; padding: 15px; background: #f8f9fa; border-radius: 8px; margin: 15px 0;">
+                        <h4>User Details:</h4>
+                        <p><strong>Username:</strong> <span id="delete-user-username"></span></p>
+                        <p><strong>Role:</strong> <span id="delete-user-role"></span></p>
+                        <p><strong>Employee Code:</strong> <span id="delete-user-empcode"></span></p>
+                        <p><strong>Full Name:</strong> <span id="delete-user-full_name"></span></p>
+                    </div>
+                    <div class="confirmation-checkbox">
+                        <input type="checkbox" id="delete-confirm" required>
+                        <label for="delete-confirm">I understand this action is permanent and want to delete this user.</label>
+                    </div>
+                    <button type="submit" class="btn delete">Delete User</button>
+                </form>
+            </div>
+            
+            <div class="page-links">
+                <a href="projectsummary.php">Back to Project Summary</a> | 
+                <a href="dailyreport.php">Go to Daily Report</a>
+            </div>
         </div>
         
         <?php if (!empty($existingUsers)): ?>
-        <div class="existing-users">
+        <div class="user-list-panel panel">
             <h3>Existing Users</h3>
-            <?php foreach ($existingUsers as $user): ?>
-                <div class="user-item">
-                    <strong><?php echo htmlspecialchars($user['username']); ?></strong> - 
-                    Role: <?php echo htmlspecialchars($user['role']); ?> - 
-                    Emp Code: <?php echo htmlspecialchars($user['empcode']); ?> - 
-                    Full Name: <?php echo htmlspecialchars($user['full_name']); ?>
-                </div>
-            <?php endforeach; ?>
+            <div class="user-list-content">
+                <?php foreach ($existingUsers as $user): ?>
+                    <div class="user-item">
+                        <strong><?php echo htmlspecialchars($user['username']); ?></strong><br>
+                        Role: <?php echo htmlspecialchars($user['role']); ?><br>
+                        Emp Code: <?php echo htmlspecialchars($user['empcode']); ?><br>
+                        Full Name: <?php echo htmlspecialchars($user['full_name'] ?: 'N/A'); ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
         <?php endif; ?>
-        
-        <div class="login-link">
-            <a href="projectsummary.php">Back to Project Summary</a> | 
-            <a href="dailyreport.php">Go to Daily Report</a>
-        </div>
     </div>
 
     <script>
@@ -479,12 +585,11 @@ try {
                 tab.classList.remove('active');
             });
             document.getElementById(tabName + '-section').classList.add('active');
-            event.target.classList.add('active');
+            event.currentTarget.classList.add('active');
         }
         
-        function fillUserDetails(username) {
-            const select = document.getElementById('update-username');
-            const selectedOption = select.options[select.selectedIndex];
+        function fillUserDetails(selectElement) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
             
             if (selectedOption && selectedOption.value) {
                 document.getElementById('update-role').value = selectedOption.dataset.role;
@@ -497,16 +602,15 @@ try {
             }
         }
         
-        function showDeleteUserDetails(username) {
-            const select = document.getElementById('delete-username');
-            const selectedOption = select.options[select.selectedIndex];
+        function showDeleteUserDetails(selectElement) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
             const detailsDiv = document.getElementById('delete-user-details');
             
             if (selectedOption && selectedOption.value) {
                 document.getElementById('delete-user-username').textContent = selectedOption.value;
                 document.getElementById('delete-user-role').textContent = selectedOption.dataset.role;
                 document.getElementById('delete-user-empcode').textContent = selectedOption.dataset.empcode;
-                document.getElementById('delete-user-full_name').textContent = selectedOption.dataset.full_name;
+                document.getElementById('delete-user-full_name').textContent = selectedOption.dataset.full_name || 'N/A';
                 detailsDiv.style.display = 'block';
             } else {
                 detailsDiv.style.display = 'none';
@@ -517,12 +621,17 @@ try {
             const username = document.getElementById('delete-username').value;
             const confirmCheckbox = document.getElementById('delete-confirm');
             
+            if (!username) {
+                alert('Please select a user to delete.');
+                return false;
+            }
+
             if (!confirmCheckbox.checked) {
-                alert('Please check the confirmation checkbox to proceed with deletion.');
+                alert('Please check the confirmation box to proceed with deletion.');
                 return false;
             }
             
-            return confirm(`Are you absolutely sure you want to delete user "${username}" from both Project Summary and Daily Report systems?\n\nThis action cannot be undone!`);
+            return confirm(`Are you absolutely sure you want to delete user "${username}"?\n\nThis action cannot be undone!`);
         }
     </script>
 </body>

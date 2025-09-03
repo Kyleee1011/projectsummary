@@ -28,10 +28,10 @@ if (!extension_loaded('fileinfo')) {
 }
 
 // Database connection
-$serverName = "172.16.2.8";
+$serverName = "10.2.0.9";
 $connectionOptions = [
     "UID" => "sa",
-    "PWD" => "i2t400",
+    "PWD" => "S3rverDB02lrn25",
     "Database" => "daily_report_db"
 ];
 $conn = sqlsrv_connect($serverName, $connectionOptions);

@@ -7,10 +7,10 @@ $usernameErr = $passwordErr = "";
 $loginErr = "";
 
 // Database connection details
-$serverName = "172.16.2.8"; // Database server IP or hostname
+$serverName = "10.2.0.9"; // Database server IP or hostname
 $connectionOptions = [
     "UID" => "sa",              // Database username
-    "PWD" => "i2t400",          // Database password
+    "PWD" => "S3rverDB02lrn25",          // Database password
     "Database" => "it_project_db" // Changed to it_project_db
 ];
 
@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: $redirect_url");
                     exit();
                 } else {
-                    header("Location: http://172.16.2.8/projectsummary/projectsummary.php");
+                    header("Location: http://10.2.0.8/projectsummary/projectsummary.php");
                     exit();
                 }
             } else {

@@ -7,11 +7,11 @@ ini_set('display_errors', 1);
 // Test basic SQL Server connection first
 echo "<h2>Testing SQL Server Connection</h2>";
 
-$serverName = "172.16.2.8";
+$serverName = "10.2.0.9";
 $connectionOptions = [
     "Database" => "it_project_db",
     "Uid" => "sa",
-    "PWD" => "i2t400",
+    "PWD" => "S3rverDB02lrn25",
     "CharacterSet" => "UTF-8"
 ];
 

@@ -2,92 +2,102 @@
 session_start();
 header('Content-Type: application/json');
 
-// Enable error logging
-ini_set('log_errors', 1);
-ini_set('error_log', 'C:\inetpub\wwwroot\projectsummary\php_errors.log');
-
 // Check if user is logged in
 if (!isset($_SESSION['username']) || !isset($_SESSION['empcode'])) {
-    error_log('Unauthorized access attempt in fetch_statistics.php');
     echo json_encode([
         'total_reports' => 0,
         'monthly_reports' => 0,
         'weekly_reports' => 0,
         'completion_rate' => '0%'
     ]);
-    exit();
+    exit;
 }
 
-// Check sqlsrv extension
-if (!extension_loaded('sqlsrv')) {
-    error_log('SQLSRV extension not loaded in fetch_statistics.php');
-    echo json_encode(['error' => 'SQLSRV extension is required but not loaded']);
-    exit();
-}
-
-// Database connection details
-$serverName = "172.16.2.8";
+// Database connection
+$serverName = "10.2.0.9";
 $connectionOptions = [
     "UID" => "sa",
-    "PWD" => "i2t400",
+    "PWD" => "S3rverDB02lrn25",
     "Database" => "daily_report_db"
 ];
-
-// Establish the connection to the SQL Server
 $conn = sqlsrv_connect($serverName, $connectionOptions);
+
 if ($conn === false) {
-    error_log('Database connection failed in fetch_statistics.php: ' . print_r(sqlsrv_errors(), true));
     echo json_encode([
         'total_reports' => 0,
         'monthly_reports' => 0,
         'weekly_reports' => 0,
         'completion_rate' => '0%'
     ]);
-    exit();
+    exit;
 }
 
 try {
-    // Get total reports count
-    $totalQuery = "SELECT COUNT(DISTINCT report_date) as total FROM reports WHERE empcode = ?";
-    $totalStmt = sqlsrv_prepare($conn, $totalQuery, [$_SESSION['empcode']]);
-    sqlsrv_execute($totalStmt);
-    $totalRow = sqlsrv_fetch_array($totalStmt, SQLSRV_FETCH_ASSOC);
-    $total_reports = $totalRow['total'] ?? 0;
+    $empcode = $_SESSION['empcode'];
+    $stats = [];
 
-    // Get monthly reports count
-    $monthlyQuery = "SELECT COUNT(DISTINCT report_date) as monthly 
-                     FROM reports 
-                     WHERE empcode = ? 
-                     AND YEAR(report_date) = YEAR(GETDATE()) 
-                     AND MONTH(report_date) = MONTH(GETDATE())";
-    $monthlyStmt = sqlsrv_prepare($conn, $monthlyQuery, [$_SESSION['empcode']]);
-    sqlsrv_execute($monthlyStmt);
-    $monthlyRow = sqlsrv_fetch_array($monthlyStmt, SQLSRV_FETCH_ASSOC);
-    $monthly_reports = $monthlyRow['monthly'] ?? 0;
+    // Total reports
+    $totalQuery = "SELECT COUNT(*) as total FROM daily_report_db.dbo.reports WHERE empcode = ?";
+    $totalStmt = sqlsrv_query($conn, $totalQuery, [$empcode]);
+    if ($totalStmt !== false) {
+        $totalResult = sqlsrv_fetch_array($totalStmt, SQLSRV_FETCH_ASSOC);
+        $stats['total_reports'] = $totalResult['total'] ?? 0;
+        sqlsrv_free_stmt($totalStmt);
+    } else {
+        $stats['total_reports'] = 0;
+    }
 
-    // Get weekly reports count
-    $weeklyQuery = "SELECT COUNT(DISTINCT report_date) as weekly 
-                    FROM reports 
-                    WHERE empcode = ? 
-                    AND report_date >= DATEADD(day, -7, GETDATE())";
-    $weeklyStmt = sqlsrv_prepare($conn, $weeklyQuery, [$_SESSION['empcode']]);
-    sqlsrv_execute($weeklyStmt);
-    $weeklyRow = sqlsrv_fetch_array($weeklyStmt, SQLSRV_FETCH_ASSOC);
-    $weekly_reports = $weeklyRow['weekly'] ?? 0;
+    // Monthly reports (current month)
+    $monthlyQuery = "SELECT COUNT(*) as monthly FROM daily_report_db.dbo.reports 
+                     WHERE empcode = ? AND YEAR(report_date) = YEAR(GETDATE()) AND MONTH(report_date) = MONTH(GETDATE())";
+    $monthlyStmt = sqlsrv_query($conn, $monthlyQuery, [$empcode]);
+    if ($monthlyStmt !== false) {
+        $monthlyResult = sqlsrv_fetch_array($monthlyStmt, SQLSRV_FETCH_ASSOC);
+        $stats['monthly_reports'] = $monthlyResult['monthly'] ?? 0;
+        sqlsrv_free_stmt($monthlyStmt);
+    } else {
+        $stats['monthly_reports'] = 0;
+    }
 
-    // Calculate completion rate (reports this month / working days this month)
-    $working_days = date('j'); // Current day of month as approximation
-    $completion_rate = $working_days > 0 ? round(($monthly_reports / $working_days) * 100) : 0;
+    // Weekly reports (current week)
+    $weeklyQuery = "SELECT COUNT(*) as weekly FROM daily_report_db.dbo.reports 
+                    WHERE empcode = ? AND report_date >= DATEADD(week, DATEDIFF(week, 0, GETDATE()), 0)
+                    AND report_date < DATEADD(week, DATEDIFF(week, 0, GETDATE()) + 1, 0)";
+    $weeklyStmt = sqlsrv_query($conn, $weeklyQuery, [$empcode]);
+    if ($weeklyStmt !== false) {
+        $weeklyResult = sqlsrv_fetch_array($weeklyStmt, SQLSRV_FETCH_ASSOC);
+        $stats['weekly_reports'] = $weeklyResult['weekly'] ?? 0;
+        sqlsrv_free_stmt($weeklyStmt);
+    } else {
+        $stats['weekly_reports'] = 0;
+    }
 
-    echo json_encode([
-        'total_reports' => $total_reports,
-        'monthly_reports' => $monthly_reports,
-        'weekly_reports' => $weekly_reports,
-        'completion_rate' => $completion_rate . '%'
-    ]);
+    // Completion rate (percentage of working days with reports this month)
+    $currentYear = date('Y');
+    $currentMonth = date('m');
+    $daysInMonth = date('t');
+    $currentDay = date('j');
+    
+    // Calculate working days (excluding weekends) up to current date
+    $workingDays = 0;
+    for ($day = 1; $day <= min($currentDay, $daysInMonth); $day++) {
+        $dayOfWeek = date('w', mktime(0, 0, 0, $currentMonth, $day, $currentYear));
+        if ($dayOfWeek != 0 && $dayOfWeek != 6) { // Not Sunday (0) or Saturday (6)
+            $workingDays++;
+        }
+    }
+    
+    if ($workingDays > 0) {
+        $completionRate = round(($stats['monthly_reports'] / $workingDays) * 100);
+        $stats['completion_rate'] = min($completionRate, 100) . '%';
+    } else {
+        $stats['completion_rate'] = '0%';
+    }
+
+    echo json_encode($stats);
 
 } catch (Exception $e) {
-    error_log('Error in fetch_statistics.php: ' . $e->getMessage());
+    error_log("Error in fetch_statistics.php: " . $e->getMessage());
     echo json_encode([
         'total_reports' => 0,
         'monthly_reports' => 0,
@@ -95,6 +105,8 @@ try {
         'completion_rate' => '0%'
     ]);
 } finally {
-    sqlsrv_close($conn);
+    if ($conn) {
+        sqlsrv_close($conn);
+    }
 }
 ?>
